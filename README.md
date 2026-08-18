@@ -45,6 +45,20 @@ what was removed. If you care, clone this repository regularly.
 
 **Does not prove:** anything about the period before the first anchor.
 
+## A note on ordering
+
+`anchors/00000867_...` was published after `anchors/00000869_...`, so the entry
+counts go backwards once. That is not a rewritten log and not a failed check.
+
+The first scheduled run read the wrong witness directory: a host-side backup
+series that runs a day behind the primary one. It anchored a real, correctly
+signed, slightly older checkpoint. The scheduler now reads the primary series,
+and the publisher refuses any checkpoint older than the last one anchored.
+
+It is left in place because this repository does not rewrite its history. That
+rule matters more than a tidy sequence, and removing an anchor to make the
+numbers look neat is precisely the behaviour the repository exists to rule out.
+
 ## Verify it yourself
 
 `verify_anchors.py` needs only Python 3 and `openssl`. It talks to nothing.
