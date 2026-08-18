@@ -1,0 +1,5 @@
+# Dralvia transparency checkpoint signing keys (Ed25519, base64 raw public keys)
+# These are PUBLIC. They verify checkpoint signatures; they cannot create them.
+
+primary-ed25519-2026-08-18   OWT0vrkTqpkr0Tv+LG1eVeMBkmUFLlDksNBx1kcTTX0=
+secondary-ed25519-2026-08-18 +B7bv95LAF7IMJymcKwMtTG0xMo19mnluNhXrHWQx1A=
