@@ -84,3 +84,55 @@ GET /api/transparency-log/consistency?old_size={entry_count}
 Take `entry_count` from an anchor, ask for the proof, and confirm the `old_root`
 it returns matches the `merkle_root` in that anchor. If it does not, the log being
 served is not an extension of the log that was anchored.
+
+## The independent witness
+
+`witness.py` runs here, on GitHub's infrastructure, every six hours. It is not
+run by Dralvia and Dralvia cannot produce a run record in this repository.
+
+Each run fetches the current checkpoint from Dralvia's public endpoint, which
+needs no account and no key:
+
+```
+GET https://dralvia.tech/api/public/transparency-log/checkpoint
+```
+
+It then verifies the Ed25519 signature against `PUBLIC_KEYS.txt` in this
+repository, compares the result against every observation already recorded in
+`observations/`, and commits what it saw.
+
+You can run exactly the same check yourself:
+
+```bash
+pip install cryptography
+python3 witness.py
+```
+
+Note that Dralvia's edge rejects the default Python user agent with a 403, so a
+client must set one. `witness.py` does.
+
+### What the observations prove
+
+- **The signature is real.** A checkpoint signed by anything other than a key
+  published here fails the run.
+- **The log never went backwards.** A checkpoint reporting fewer entries than one
+  already recorded fails the run.
+- **A count never changed its root.** If entry count N was recorded with root R
+  and later reports a different root, both records sit here side by side and the
+  run fails.
+
+Because the record is committed here, on a schedule, by a runner Dralvia does not
+control, "what Dralvia said the log looked like at time T" is not something
+Dralvia can revise afterwards.
+
+### What they do not prove
+
+The observations do **not** prove that the current log contains the earlier one.
+That needs a consistency proof, and Dralvia's consistency endpoint requires
+authentication, so an anonymous witness cannot request one. This witness detects
+contradiction, not prefix inclusion. If you hold an account, run the consistency
+check in the section above as well; the two together are much stronger than
+either alone.
+
+A red run on this repository's Actions tab is a finding. Read the log, then read
+`observations/` and compare for yourself.

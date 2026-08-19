@@ -1,0 +1,50 @@
+name: witness
+
+# An independent observation of Dralvia's transparency log.
+#
+# This runs on GitHub's infrastructure. Dralvia operates the log, the signing
+# key and the anchors; it does not operate this runner and cannot produce a run
+# record here. That separation is the only thing that makes this a witness
+# rather than a second copy of Dralvia's own claim.
+
+on:
+  schedule:
+    # Every six hours. The log grows a few times a day, so this records most
+    # states without being noisy.
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: witness
+  cancel-in-progress: false
+
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install the one dependency
+        run: python -m pip install --quiet "cryptography>=42"
+
+      - name: Observe and verify the current checkpoint
+        run: python witness.py
+
+      - name: Record what was seen
+        run: |
+          if [ -z "$(git status --porcelain observations/)" ]; then
+            echo "No new checkpoint to record."
+            exit 0
+          fi
+          git config user.name "Dralvia Transparency Witness"
+          git config user.email "transparency@dralvia.tech"
+          git add observations/
+          git commit -m "Observe transparency log checkpoint"
+          git push
