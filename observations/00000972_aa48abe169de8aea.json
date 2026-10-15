@@ -1,0 +1,28 @@
+{
+  "checkpoint": {
+    "entry_count": 972,
+    "issued_at": "2026-10-15T11:02:34.548379Z",
+    "last_index": 971,
+    "last_timestamp": "2026-10-15T10:41:10.219268Z",
+    "log_hash": "3b9ccd00ad4d317467b44cac0f47b99640749630d4ce7e799f666f84ceba4f19",
+    "log_path": "/var/lib/dralvia/datasets/evidencepacks/transparency.log",
+    "merkle_root": "aa48abe169de8aea3d9302f592be7de922ce0b2192cd55422edbfbe7ef40f0a0",
+    "previous_witness_hash": "fee137a8a5610747d6fda2701e9a4ffe400776ca867936751b12d9cc825cae5d",
+    "signature": {
+      "algorithm": "Ed25519",
+      "key_id": "primary-ed25519-2026-08-18",
+      "signed_at": "2026-10-15T11:02:34.549804Z",
+      "value": "02rXdxSDlXD7B5McuBcYlYUsotjMDApYlV1Wdbo9fE53bmJSKpiAHLNmGVStuXoCHdTQWhTPEHbseMpw+BvWAw=="
+    },
+    "version": 1,
+    "witness_hash": "eca97613166151dd4ef6d09275a2326712bc3c26f7a5227ecefa8a1f4fe07240"
+  },
+  "kind": "dralvia.transparency.witness-observation",
+  "observed_at": "2026-10-15T11:25:45.937796Z",
+  "observed_by": "github-actions:Dralvia/transparency-log",
+  "previous_observation": "00000970_1255c24025a64b82.json",
+  "signature_key_id": "primary-ed25519-2026-08-18",
+  "signature_verified": true,
+  "source_url": "https://dralvia.tech/api/public/transparency-log/checkpoint",
+  "version": 1
+}
