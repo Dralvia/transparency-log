@@ -1,0 +1,46 @@
+name: verify
+
+# Runs verify_anchors.py and its tests whenever an anchor or the script changes.
+# macOS uses the LibreSSL it ships as `openssl`, which prints hex dumps
+# differently from OpenSSL, so both have to pass.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "anchors/**"
+      - "verify_anchors.py"
+      - "tests/**"
+      - ".github/workflows/verify.yml"
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Use the system openssl (LibreSSL on macOS)
+        if: runner.os == 'macOS'
+        run: echo "/usr/bin" >> "$GITHUB_PATH"
+
+      - name: Show which openssl this run uses
+        run: command -v openssl && openssl version
+
+      - name: Tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Verify every anchor
+        run: python verify_anchors.py anchors/

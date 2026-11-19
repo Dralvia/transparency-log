@@ -72,6 +72,16 @@ against that digest and the system trust store, and the chain from one anchor to
 the next. See `VERIFY.md` for what each failure means and how to do the same
 checks by hand.
 
+The digest a token covers is read from the token's own bytes, so the result does
+not depend on how a particular `openssl` prints it. It works with OpenSSL and
+with the LibreSSL that macOS ships as `openssl`. The `verify` workflow runs the
+script and its tests on Linux and on macOS whenever an anchor or the script
+changes. To run the tests yourself:
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
 ## Cross-checking against the live log
 
 Consistency proofs from the live API let you connect an anchor here to the log
