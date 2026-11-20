@@ -146,3 +146,22 @@ either alone.
 
 A red run on this repository's Actions tab is a finding. Read the log, then read
 `observations/` and compare for yourself.
+
+## Other Dralvia public keys
+
+`release-keys/edr-release-ecdsa-p256.pem` is the key that signs Dralvia EDR sensor
+releases (ECDSA P-256 with SHA-256). Its SHA-256 fingerprint, taken over the DER form, is
+
+```
+d35fcccb3fcf944a8cc3782ecc1843e490d200e65efa96dfa909de9e0d5f5dc2
+```
+
+Dralvia also serves it from its API and prints it in its documentation. It is here so
+you can compare against a copy that does not come from Dralvia's own servers:
+
+```bash
+openssl pkey -pubin -in release-keys/edr-release-ecdsa-p256.pem -outform DER | sha256sum
+```
+
+It is not a checkpoint key; `witness.py` does not read it.
+
